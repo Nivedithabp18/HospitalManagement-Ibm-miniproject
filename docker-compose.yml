@@ -1,0 +1,69 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  user-service:
+    build: ./user-service
+    ports:
+      - "5001:5001"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/hospital_users
+      - JWT_SECRET=hospital_jwt_secret
+    depends_on:
+      - mongo
+
+  patient-service:
+    build: ./patient-service
+    ports:
+      - "5002:5002"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/hospital_patients
+      - JWT_SECRET=hospital_jwt_secret
+    depends_on:
+      - mongo
+
+  appointment-service:
+    build: ./appointment-service
+    ports:
+      - "5003:5003"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/hospital_appointments
+      - JWT_SECRET=hospital_jwt_secret
+    depends_on:
+      - mongo
+
+  notification-service:
+    build: ./notification-service
+    ports:
+      - "5004:5004"
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "5000:5000"
+    environment:
+      - USER_SERVICE_URL=http://user-service:5001
+      - PATIENT_SERVICE_URL=http://patient-service:5002
+      - APPOINTMENT_SERVICE_URL=http://appointment-service:5003
+      - NOTIFICATION_SERVICE_URL=http://notification-service:5004
+    depends_on:
+      - user-service
+      - patient-service
+      - appointment-service
+      - notification-service
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - api-gateway
+
+volumes:
+  mongo-data:
