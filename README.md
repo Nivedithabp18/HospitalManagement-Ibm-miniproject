@@ -60,22 +60,31 @@ Each service has a `.env` file. Update MongoDB URI and JWT secret as needed.
 
 ```bash
 # Terminal 1
-cd user-service && npm start
+cd D:\hospital-management\user-service
+npm install
+npm start
 
 # Terminal 2
-cd patient-service && npm start
+cd D:\hospital-management\patient-service
+npm install
+npm start
 
 # Terminal 3
-cd appointment-service && npm start
+cd D:\hospital-management\notification-service
+npm install
+npm start
 
 # Terminal 4
-cd notification-service && npm start
+cd D:\hospital-management\api-gateway
+npm install
+npm start
 
 # Terminal 5
-cd api-gateway && npm start
+cd D:\hospital-management\frontend
+npm install
+npm run dev
 
-# Terminal 6
-cd frontend && npm run dev
+
 ```
 
 ### 5. Open browser
@@ -88,8 +97,3 @@ http://localhost:5173
 
 Register a new account via the UI, then log in.
 
-## Docker (Optional)
-
-```bash
-docker-compose up --build
-```
